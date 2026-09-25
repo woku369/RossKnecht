@@ -13,6 +13,8 @@ class UebersichtTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final zeilen = <MapEntry<String, String>>[
+      if (pferd.eingetragenerName != null && pferd.eingetragenerName!.isNotEmpty)
+        MapEntry('Eingetragener Name', pferd.eingetragenerName!),
       MapEntry('Rasse', pferd.rasse ?? '-'),
       MapEntry('Geschlecht', pferd.geschlecht.label),
       MapEntry('Geburtsjahr', pferd.geburtsjahr != null ? '${pferd.geburtsjahr} (${pferd.alterJahre} Jahre)' : '-'),
@@ -22,6 +24,10 @@ class UebersichtTab extends StatelessWidget {
       MapEntry('Chipnummer', pferd.chipnummer ?? '-'),
       MapEntry('Besitzer', pferd.besitzer ?? '-'),
       MapEntry('Stallplatz', pferd.stallplatz ?? '-'),
+      if (pferd.externerStallname != null && pferd.externerStallname!.isNotEmpty)
+        MapEntry('Auswärtiger Stall', pferd.externerStallname!),
+      if (pferd.externerKontakt != null && pferd.externerKontakt!.isNotEmpty)
+        MapEntry('Kontakt (auswärts)', pferd.externerKontakt!),
       MapEntry('Ankunftsdatum', pferd.ankunftsdatum != null ? pferd.ankunftsdatum!.deDate : '-'),
     ];
 

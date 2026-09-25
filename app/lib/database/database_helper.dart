@@ -24,7 +24,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'rossknecht.db';
-  static const _dbVersion = 1;
+  static const _dbVersion = 2;
 
   Database? _database;
 
@@ -62,15 +62,18 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Noch keine Migrationen noetig (Version 1 = Erstauslieferung). Kuenftige
-    // Schema-Aenderungen folgen dem kumulativen Muster aus FuhrparkMeister:
-    // if (oldVersion < 2) { await db.execute('ALTER TABLE ... ADD COLUMN ...'); }
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE pferde ADD COLUMN eingetragener_name TEXT');
+      await db.execute('ALTER TABLE pferde ADD COLUMN externer_stallname TEXT');
+      await db.execute('ALTER TABLE pferde ADD COLUMN externer_kontakt TEXT');
+    }
   }
 
   static const String _createPferdeTable = '''
     CREATE TABLE pferde (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
+      eingetragener_name TEXT,
       rasse TEXT,
       geschlecht TEXT NOT NULL,
       geburtsjahr INTEGER,
@@ -80,6 +83,8 @@ class DatabaseHelper {
       chipnummer TEXT,
       besitzer TEXT,
       stallplatz TEXT,
+      externer_stallname TEXT,
+      externer_kontakt TEXT,
       ankunftsdatum TEXT,
       foto_pfad TEXT,
       notizen TEXT,

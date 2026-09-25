@@ -1,5 +1,6 @@
 enum DeckenTyp {
   weidedecke,
+  winterdecke,
   stalldecke,
   regendecke,
   abschwitzdecke,
@@ -13,6 +14,8 @@ extension DeckenTypX on DeckenTyp {
     switch (this) {
       case DeckenTyp.weidedecke:
         return 'Weidedecke';
+      case DeckenTyp.winterdecke:
+        return 'Winterdecke';
       case DeckenTyp.stalldecke:
         return 'Stalldecke';
       case DeckenTyp.regendecke:

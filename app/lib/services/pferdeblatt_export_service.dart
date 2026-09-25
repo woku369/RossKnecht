@@ -120,7 +120,9 @@ class PferdeblattExportService {
 
   pw.Widget _stammdatenTabelle(Pferd pferd) {
     final zeilen = <List<String>>[
-      ['Name', pferd.anzeigename],
+      ['Rufname', pferd.anzeigename],
+      if (pferd.eingetragenerName != null && pferd.eingetragenerName!.isNotEmpty)
+        ['Eingetragener Name', pferd.eingetragenerName!],
       ['Rasse', pferd.rasse ?? '-'],
       ['Geschlecht', pferd.geschlecht.label],
       ['Geburtsjahr', pferd.geburtsjahr?.toString() ?? '-'],
@@ -130,6 +132,10 @@ class PferdeblattExportService {
       ['Chipnummer', pferd.chipnummer ?? '-'],
       ['Besitzer', pferd.besitzer ?? '-'],
       ['Stallplatz', pferd.stallplatz ?? '-'],
+      if (pferd.externerStallname != null && pferd.externerStallname!.isNotEmpty)
+        ['Auswärtiger Stall', pferd.externerStallname!],
+      if (pferd.externerKontakt != null && pferd.externerKontakt!.isNotEmpty)
+        ['Kontakt (auswärts)', pferd.externerKontakt!],
     ];
     return pw.Table(
       border: pw.TableBorder.all(width: 0.5, color: PdfColors.grey400),

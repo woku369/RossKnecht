@@ -269,7 +269,7 @@ class _LizenzFormSheetState extends State<_LizenzFormSheet> {
         left: 16,
         right: 16,
         top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom + 16,
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -402,7 +402,7 @@ class _StartFormSheetState extends State<_StartFormSheet> {
         left: 16,
         right: 16,
         top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom + 16,
       ),
       child: SingleChildScrollView(
         child: Column(

@@ -9,6 +9,38 @@ import '../providers/pferde_provider.dart';
 import '../services/document_storage.dart';
 import '../widgets/date_format_x.dart';
 
+/// Kombinierte Farbliste: deutsche Fellfarben-Begriffe plus die von der AQHA
+/// (American Quarter Horse Association) offiziell geführten Farben - relevant
+/// z. B. bei Quarter Horses, deren Papiere/Community oft die amerikanischen
+/// Bezeichnungen verwenden (Buckskin, Grullo, Dun, Roan ...).
+const List<String> _farbVorschlaege = [
+  'Fuchs',
+  'Rappe',
+  'Braun',
+  'Dunkelbraun',
+  'Schimmel',
+  'Falbe',
+  'Isabell',
+  'Schecke',
+  'Tigerschecke',
+  'Bay',
+  'Black',
+  'Blue Roan',
+  'Brown',
+  'Buckskin',
+  'Chestnut',
+  'Cremello',
+  'Dun',
+  'Gray',
+  'Grullo',
+  'Palomino',
+  'Perlino',
+  'Red Dun',
+  'Red Roan',
+  'Roan',
+  'Sorrel',
+];
+
 class PferdFormScreen extends StatefulWidget {
   final Pferd? bestehendesPferd;
 
@@ -21,6 +53,7 @@ class PferdFormScreen extends StatefulWidget {
 class _PferdFormScreenState extends State<PferdFormScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
+  late final TextEditingController _eingetragenerNameController;
   late final TextEditingController _rasseController;
   late final TextEditingController _geburtsjahrController;
   late final TextEditingController _farbeController;
@@ -29,7 +62,10 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
   late final TextEditingController _chipnummerController;
   late final TextEditingController _besitzerController;
   late final TextEditingController _stallplatzController;
+  late final TextEditingController _externerStallnameController;
+  late final TextEditingController _externerKontaktController;
   late final TextEditingController _notizenController;
+  final _farbeFocusNode = FocusNode();
 
   Geschlecht _geschlecht = Geschlecht.wallach;
   DateTime? _ankunftsdatum;
@@ -43,6 +79,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
     super.initState();
     final p = widget.bestehendesPferd;
     _nameController = TextEditingController(text: p?.name ?? '');
+    _eingetragenerNameController = TextEditingController(text: p?.eingetragenerName ?? '');
     _rasseController = TextEditingController(text: p?.rasse ?? '');
     _geburtsjahrController = TextEditingController(text: p?.geburtsjahr?.toString() ?? '');
     _farbeController = TextEditingController(text: p?.farbe ?? '');
@@ -51,6 +88,8 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
     _chipnummerController = TextEditingController(text: p?.chipnummer ?? '');
     _besitzerController = TextEditingController(text: p?.besitzer ?? '');
     _stallplatzController = TextEditingController(text: p?.stallplatz ?? '');
+    _externerStallnameController = TextEditingController(text: p?.externerStallname ?? '');
+    _externerKontaktController = TextEditingController(text: p?.externerKontakt ?? '');
     _notizenController = TextEditingController(text: p?.notizen ?? '');
     _geschlecht = p?.geschlecht ?? Geschlecht.wallach;
     _ankunftsdatum = p?.ankunftsdatum;
@@ -60,6 +99,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _eingetragenerNameController.dispose();
     _rasseController.dispose();
     _geburtsjahrController.dispose();
     _farbeController.dispose();
@@ -68,7 +108,10 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
     _chipnummerController.dispose();
     _besitzerController.dispose();
     _stallplatzController.dispose();
+    _externerStallnameController.dispose();
+    _externerKontaktController.dispose();
     _notizenController.dispose();
+    _farbeFocusNode.dispose();
     super.dispose();
   }
 
@@ -104,6 +147,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
     if (_isEdit) {
       final p = widget.bestehendesPferd!;
       p.name = _nameController.text.trim();
+      p.eingetragenerName = _leerZuNull(_eingetragenerNameController.text);
       p.rasse = _leerZuNull(_rasseController.text);
       p.geschlecht = _geschlecht;
       p.geburtsjahr = geburtsjahr;
@@ -113,6 +157,8 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
       p.chipnummer = _leerZuNull(_chipnummerController.text);
       p.besitzer = _leerZuNull(_besitzerController.text);
       p.stallplatz = _leerZuNull(_stallplatzController.text);
+      p.externerStallname = _leerZuNull(_externerStallnameController.text);
+      p.externerKontakt = _leerZuNull(_externerKontaktController.text);
       p.ankunftsdatum = _ankunftsdatum;
       p.fotoPfad = _fotoPfad;
       p.notizen = _leerZuNull(_notizenController.text);
@@ -120,6 +166,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
     } else {
       await provider.addPferd(
         name: _nameController.text.trim(),
+        eingetragenerName: _leerZuNull(_eingetragenerNameController.text),
         rasse: _leerZuNull(_rasseController.text),
         geschlecht: _geschlecht,
         geburtsjahr: geburtsjahr,
@@ -129,6 +176,8 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
         chipnummer: _leerZuNull(_chipnummerController.text),
         besitzer: _leerZuNull(_besitzerController.text),
         stallplatz: _leerZuNull(_stallplatzController.text),
+        externerStallname: _leerZuNull(_externerStallnameController.text),
+        externerKontakt: _leerZuNull(_externerKontaktController.text),
         ankunftsdatum: _ankunftsdatum,
         fotoPfad: _fotoPfad,
         notizen: _leerZuNull(_notizenController.text),
@@ -146,7 +195,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.of(context).padding.bottom + 16),
           children: [
             Center(
               child: GestureDetector(
@@ -185,8 +234,16 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
             const SizedBox(height: 24),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name *'),
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Name erforderlich' : null,
+              decoration: const InputDecoration(labelText: 'Rufname *'),
+              validator: (v) => (v == null || v.trim().isEmpty) ? 'Rufname erforderlich' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _eingetragenerNameController,
+              decoration: const InputDecoration(
+                labelText: 'Eingetragener Name (Papiere)',
+                helperText: 'Offizieller Zuchtname, falls abweichend vom Rufnamen',
+              ),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -207,9 +264,48 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _farbeController,
-              decoration: const InputDecoration(labelText: 'Farbe'),
+            RawAutocomplete<String>(
+              textEditingController: _farbeController,
+              focusNode: _farbeFocusNode,
+              optionsBuilder: (value) {
+                if (value.text.trim().isEmpty) return _farbVorschlaege;
+                final suche = value.text.toLowerCase();
+                return _farbVorschlaege.where((f) => f.toLowerCase().contains(suche));
+              },
+              fieldViewBuilder: (context, controller, focusNode, onSubmit) {
+                return TextFormField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    labelText: 'Farbe',
+                    helperText: 'Freitext oder Vorschlag (deutsch & amerikanisch, z. B. Buckskin, Grullo, Dun)',
+                  ),
+                );
+              },
+              optionsViewBuilder: (context, onSelected, options) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Material(
+                    elevation: 4,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 240),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: options.length,
+                        itemBuilder: (context, index) {
+                          final option = options.elementAt(index);
+                          return ListTile(
+                            dense: true,
+                            title: Text(option),
+                            onTap: () => onSelected(option),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -234,9 +330,26 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
             const SizedBox(height: 12),
             TextFormField(
               controller: _stallplatzController,
-              decoration: const InputDecoration(labelText: 'Stallplatz / Box'),
+              decoration: const InputDecoration(labelText: 'Stallplatz / Box (eigener Stall)'),
+            ),
+            const SizedBox(height: 20),
+            const Text('Auswärtige Unterbringung', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            const Text(
+              'Nur ausfüllen, wenn das Pferd nicht im eigenen Stall, sondern in Pension/Beritt o. Ä. steht.',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: _externerStallnameController,
+              decoration: const InputDecoration(labelText: 'Name des auswärtigen Stalls'),
             ),
             const SizedBox(height: 12),
+            TextFormField(
+              controller: _externerKontaktController,
+              decoration: const InputDecoration(labelText: 'Kontakt dort (Person/Telefon)'),
+            ),
+            const SizedBox(height: 20),
             InkWell(
               onTap: _datumWaehlen,
               child: InputDecorator(

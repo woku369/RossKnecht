@@ -16,6 +16,7 @@ extension GeschlechtX on Geschlecht {
 class Pferd {
   final String id;
   String name;
+  String? eingetragenerName;
   String? rasse;
   Geschlecht geschlecht;
   int? geburtsjahr;
@@ -25,6 +26,8 @@ class Pferd {
   String? chipnummer;
   String? besitzer;
   String? stallplatz;
+  String? externerStallname;
+  String? externerKontakt;
   DateTime? ankunftsdatum;
   String? fotoPfad;
   String? notizen;
@@ -37,6 +40,7 @@ class Pferd {
   Pferd({
     required this.id,
     required this.name,
+    this.eingetragenerName,
     this.rasse,
     this.geschlecht = Geschlecht.wallach,
     this.geburtsjahr,
@@ -46,6 +50,8 @@ class Pferd {
     this.chipnummer,
     this.besitzer,
     this.stallplatz,
+    this.externerStallname,
+    this.externerKontakt,
     this.ankunftsdatum,
     this.fotoPfad,
     this.notizen,
@@ -67,6 +73,7 @@ class Pferd {
     return {
       'id': id,
       'name': name,
+      'eingetragener_name': eingetragenerName,
       'rasse': rasse,
       'geschlecht': geschlecht.name,
       'geburtsjahr': geburtsjahr,
@@ -76,6 +83,8 @@ class Pferd {
       'chipnummer': chipnummer,
       'besitzer': besitzer,
       'stallplatz': stallplatz,
+      'externer_stallname': externerStallname,
+      'externer_kontakt': externerKontakt,
       'ankunftsdatum': ankunftsdatum?.toIso8601String(),
       'foto_pfad': fotoPfad,
       'notizen': notizen,
@@ -91,6 +100,7 @@ class Pferd {
     return Pferd(
       id: map['id'] as String,
       name: map['name'] as String,
+      eingetragenerName: map['eingetragener_name'] as String?,
       rasse: map['rasse'] as String?,
       geschlecht: Geschlecht.values.firstWhere(
         (g) => g.name == map['geschlecht'],
@@ -103,6 +113,8 @@ class Pferd {
       chipnummer: map['chipnummer'] as String?,
       besitzer: map['besitzer'] as String?,
       stallplatz: map['stallplatz'] as String?,
+      externerStallname: map['externer_stallname'] as String?,
+      externerKontakt: map['externer_kontakt'] as String?,
       ankunftsdatum: map['ankunftsdatum'] != null
           ? DateTime.parse(map['ankunftsdatum'] as String)
           : null,

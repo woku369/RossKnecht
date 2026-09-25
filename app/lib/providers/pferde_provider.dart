@@ -56,6 +56,7 @@ class PferdeProvider extends ChangeNotifier {
 
   Future<Pferd> addPferd({
     required String name,
+    String? eingetragenerName,
     String? rasse,
     Geschlecht geschlecht = Geschlecht.wallach,
     int? geburtsjahr,
@@ -65,6 +66,8 @@ class PferdeProvider extends ChangeNotifier {
     String? chipnummer,
     String? besitzer,
     String? stallplatz,
+    String? externerStallname,
+    String? externerKontakt,
     DateTime? ankunftsdatum,
     String? fotoPfad,
     String? notizen,
@@ -73,6 +76,7 @@ class PferdeProvider extends ChangeNotifier {
     final pferd = Pferd(
       id: _uuid.v4(),
       name: name,
+      eingetragenerName: eingetragenerName,
       rasse: rasse,
       geschlecht: geschlecht,
       geburtsjahr: geburtsjahr,
@@ -82,6 +86,8 @@ class PferdeProvider extends ChangeNotifier {
       chipnummer: chipnummer,
       besitzer: besitzer,
       stallplatz: stallplatz,
+      externerStallname: externerStallname,
+      externerKontakt: externerKontakt,
       ankunftsdatum: ankunftsdatum,
       fotoPfad: fotoPfad,
       notizen: notizen,

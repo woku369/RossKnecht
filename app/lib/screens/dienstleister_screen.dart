@@ -146,7 +146,7 @@ class _DienstleisterFormSheetState extends State<_DienstleisterFormSheet> {
         left: 16,
         right: 16,
         top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom + 16,
       ),
       child: SingleChildScrollView(
         child: Column(

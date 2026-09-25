@@ -1,14 +1,17 @@
 # Roadmap – RossKnecht
 
 ## Erledigt (v1.0)
-- [x] Pferdeverwaltung (Name, Rasse, Geschlecht, Geburtsjahr, Farbe, Abzeichen, Lebensnummer, Chipnummer, Besitzer, Stallplatz, Ankunftsdatum, Foto)
+- [x] Pferdeverwaltung (Rufname + optional eingetragener Name, Rasse, Geschlecht, Geburtsjahr, Farbe, Abzeichen, Lebensnummer, Chipnummer, Besitzer, Stallplatz oder auswärtiger Stall+Kontakt, Ankunftsdatum, Foto)
+- [x] Farbfeld mit Autocomplete-Vorschlägen in deutscher und amerikanischer/AQHA-Nomenklatur (Buckskin, Grullo, Dun, Roan, Sorrel, ...) – freies Texteingabefeld bleibt möglich
 - [x] Impfungen (Influenza, Tetanus, Herpes, Tollwut, Sonstige) mit Chargennummer, Fälligkeit und lokaler Erinnerung
 - [x] Entwurmung (Wurmkur oder Kotprobe) mit Präparat/Ergebnis, Fälligkeit und Erinnerung
 - [x] Tierärztliche Behandlungen (ad-hoc, z. B. Kolik/Verletzung) mit Grund, Behandlung, Kosten und optionaler Nachkontroll-Erinnerung
 - [x] Gesundheitstermine (Hufschmied/Hufpflege, Zahnarzt, tierärztliche Kontrolle, Sonstiges) mit Erledigt-Status
 - [x] Turnierlizenzen (FN/FEI/Landesverband) mit Ablauf-Erinnerung
 - [x] Turnierstarts als einfache Ergebnishistorie
-- [x] Deckenmanagement (Typ, Füllung, Größe, Zustand, in Gebrauch, optionale Imprägnierungs-Erinnerung)
+- [x] Deckenmanagement (Typ inkl. Winterdecke, Füllung, Größe, Zustand, in Gebrauch, optionale Imprägnierungs-Erinnerung)
+- [x] Eigenes Branding: Stallname + Logo im Home-Screen (Einstellungen-Screen, lokal via SharedPreferences)
+- [x] Bugfix: Speichern-Buttons in allen Formularen/Bottom-Sheets waren vom System-Navigationsbalken (Gestennavigation) teilweise verdeckt – Padding korrigiert
 - [x] Dokumenten-Galerie je Pferd (Foto/Kamera oder Galerie, kategorisiert)
 - [x] Versicherungen (Art, Gesellschaft, Polizzennummer, Zahlungsintervall, korrekte Fälligkeitsberechnung)
 - [x] Dienstleister-Verwaltung (Tierarzt, Hufschmied, Sattler), Zuordnung zu Impfungen/Gesundheitsterminen
@@ -23,6 +26,7 @@
 - [x] `android/`-Ordner fest im Repo, Flutter-Version im CI fest gepinnt
 
 ## Offen
+- [ ] Nomenklatur-Durchgang: Begriffe/Feldnamen in der App noch nicht final abgestimmt (aus erstem Praxistest) – konkrete Stellen sammeln und in einem eigenen Durchgang vereinheitlichen
 - [ ] `flutter pub get` / `flutter analyze` / echten Build einmal lokal oder in einer Umgebung mit Flutter-SDK durchführen (hier nicht möglich, siehe README "Bekannte Einschränkungen")
 - [ ] Google-Cloud-Projekt + OAuth-Client gemäß README einrichten und Login/Upload/Restore einmal real durchtesten
 - [ ] App-Icon gestalten (aktuell Standard-Flutter-Icon)

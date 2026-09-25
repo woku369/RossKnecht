@@ -25,14 +25,14 @@ Pferdemanagement für **Impfungen, Entwurmung, Hufschmied/Zahnarzt, Turnierlizen
 
 ## Features
 
-- **Pferdeverwaltung**: Name, Rasse, Geschlecht, Geburtsjahr, Farbe, Abzeichen, Lebensnummer (UELN), Chipnummer, Besitzer, Stallplatz, Ankunftsdatum, Foto
+- **Pferdeverwaltung**: Rufname und optional eingetragener (Papier-)Name, Rasse, Geschlecht, Geburtsjahr, Farbe (Freitext mit Vorschlägen in deutscher und amerikanischer/AQHA-Nomenklatur, z. B. Buckskin, Grullo, Dun – relevant u. a. für Quarter Horses), Abzeichen, Lebensnummer (UELN), Chipnummer, Besitzer, eigener Stallplatz **oder** Name/Kontakt eines auswärtigen Stalls (Pension/Beritt), Ankunftsdatum, Foto
 - **Impfungen**: Influenza, Tetanus, Herpes, Tollwut, Sonstige – jeweils mit Chargennummer (Equidenpass-Dokumentationspflicht), Fälligkeit und lokaler Erinnerung X Tage vorher; Verlauf pro Impfstoff bleibt als Historie erhalten, nur der jeweils neueste Eintrag zählt für die Erinnerung
 - **Entwurmung**: klassische Wurmkur oder Kotprobe (selektive Entwurmung) mit Präparat/Wirkstoff bzw. Ergebnis, Fälligkeit und Erinnerung
 - **Tierärztliche Behandlungen**: ad-hoc erfasste Behandlungsfälle (z. B. Kolik, Verletzung, akute Erkrankung) mit Grund/Diagnose, durchgeführter Behandlung, Tierarzt, Kosten und optionaler Nachkontroll-Erinnerung – als Historie, unabhängig von wiederkehrenden Terminen
 - **Gesundheitstermine**: Hufschmied/Hufpflege, Zahnarzt, tierärztliche Kontrolle, Sonstiges – mit Fälligkeit, Erinnerung und Erledigt-Status
 - **Turnierlizenzen**: FN/FEI/Landesverband, Lizenznummer, Gültigkeitszeitraum mit Ablauf-Erinnerung
 - **Turnierstarts**: einfache Ergebnishistorie (Datum, Ort, Disziplin, Platzierung)
-- **Deckenmanagement**: Weide-, Stall-, Regen-, Abschwitz-, Flieger- und Kombidecken je Pferd mit Füllung (Gramm), Größe, Zustand, "aktuell in Gebrauch"-Kennzeichnung und optionaler Imprägnierungs-Erinnerung
+- **Deckenmanagement**: Weide-, Winter-, Stall-, Regen-, Abschwitz-, Flieger- und Kombidecken je Pferd mit Füllung (Gramm), Größe, Zustand, "aktuell in Gebrauch"-Kennzeichnung und optionaler Imprägnierungs-Erinnerung
 - **Dokumenten-Galerie**: Fotos von Equidenpass, Impfausweis, Kaufvertrag, Versicherungspolizze, Röntgenbildern etc. je Pferd, kategorisiert, lokal gespeichert
 - **Versicherungen**: Haftpflicht, OP-, Lebens- und Krankenversicherung mit Zahlungsintervall und korrekter Fälligkeitsberechnung (Hauptfälligkeit ≠ nächster Zahlungstermin, wird anhand des Intervalls vorgerückt)
 - **Dienstleister-Verwaltung**: Tierärzte, Hufschmiede, Sattler – Zuordnung zu Impfungen und Gesundheitsterminen
@@ -40,6 +40,7 @@ Pferdemanagement für **Impfungen, Entwurmung, Hufschmied/Zahnarzt, Turnierlizen
 - **Termine-Übersicht**: alle offenen Fälligkeiten pferdeübergreifend, farblich nach Dringlichkeit sortiert
 - **Historie- und PDF-Export**: Gesundheitshistorie als Text sowie ein vollständiges Pferdedatenblatt als A4-PDF, beide teilbar (z. B. für die Stallmappe oder beim Verkauf)
 - **Pferde-Archivierung** (verkauft/verstorben): Pferd wird aus der aktiven Liste ausgeblendet, Daten/Historie bleiben erhalten und sind über "Archivierte Pferde" weiterhin einsehbar; archivierte Pferde erzeugen keine Erinnerungen mehr
+- **Eigenes Branding**: Stallname und Logo (über Einstellungen-Symbol im Home-Screen) ersetzen dort den Standardtitel "RossKnecht"
 - **Offline-fähig**: lokale SQLite-Datenbank als primärer Datenspeicher
 - **Lokales ZIP-Backup**: Export/Import ohne jede Einrichtung – Export legt die Datei im App-eigenen Ordner ab und öffnet zusätzlich die Android-Systemfreigabe, Import liest die neueste ZIP-Datei aus diesem Ordner ein oder wird per Android-Teilen-Dialog ("Öffnen mit RossKnecht") direkt angenommen
 - **Backup & Geräte-Sync über Google Drive**: manueller Voll-Snapshot (Datenbank + Dokumentenfotos) in einen eigenen Drive-Ordner hoch- und herunterladen, für Nutzung auf mehreren Geräten

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/pferd.dart';
 import '../providers/pferde_provider.dart';
 import '../services/local_backup_service.dart';
+import '../services/settings_service.dart';
 import '../services/share_import_service.dart';
 import '../widgets/empty_state.dart';
 import 'archived_pferde_screen.dart';
@@ -14,6 +15,7 @@ import 'dienstleister_screen.dart';
 import 'pferd_detail_screen.dart';
 import 'pferd_form_screen.dart';
 import 'reminders_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +25,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? _stallName;
+  String? _logoPfad;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,17 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<PferdeProvider>().loadAll();
     });
     _aufGeteilteBackupsHoeren();
+    _stallEinstellungenLaden();
+  }
+
+  Future<void> _stallEinstellungenLaden() async {
+    final name = await SettingsService.instance.getStallName();
+    final logo = await SettingsService.instance.getLogoPfad();
+    if (!mounted) return;
+    setState(() {
+      _stallName = name;
+      _logoPfad = logo;
+    });
   }
 
   // Reagiert auf eine per Android-Teilen-Dialog ("Öffnen mit RossKnecht")
@@ -65,8 +81,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('RossKnecht'),
+        title: (_stallName != null && _stallName!.isNotEmpty)
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (_logoPfad != null) ...[
+                    CircleAvatar(radius: 16, backgroundImage: FileImage(File(_logoPfad!))),
+                    const SizedBox(width: 10),
+                  ],
+                  Flexible(child: Text(_stallName!, overflow: TextOverflow.ellipsis)),
+                ],
+              )
+            : const Text('RossKnecht'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Einstellungen',
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+              _stallEinstellungenLaden();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             tooltip: 'Anstehende Termine',
