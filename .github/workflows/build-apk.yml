@@ -1,0 +1,77 @@
+name: APK bauen
+
+on:
+  push:
+    branches:
+      - claude/rossknecht-pferdemanagement-app-es2tku
+      - main
+    paths:
+      - "app/**"
+      - ".github/workflows/build-apk.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# Verhindert, dass zwei schnell aufeinanderfolgende Pushes parallel bauen
+# und ums Veroeffentlichen des Releases wettlaufen - passiert, gewinnt
+# nicht garantiert der neuere Commit. Ein neuer Lauf auf demselben Branch
+# bricht einen noch laufenden aelteren stattdessen sauber ab.
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          # Fest gepinnt statt 'channel: stable' allein: der android/-Ordner
+          # ist fest im Repo (siehe unten) statt bei jedem Lauf neu
+          # generiert - ohne feste Version koennte ein kuenftiges Flutter-
+          # Stable-Update Gradle-/AGP-Anforderungen aendern, die zum
+          # eingecheckten Projektstand nicht mehr passen.
+          flutter-version: 3.47.5
+
+      - run: flutter pub get
+      - run: flutter analyze
+      - name: APK bauen (versionCode = eindeutige, strikt steigende GitHub-Run-Nummer)
+        run: |
+          flutter build apk --release \
+            --build-name=1.0.0 \
+            --build-number=${{ github.run_number }}
+
+      - name: APK-Signatur verifizieren (bricht den Build ab, falls je wieder ungueltig)
+        run: |
+          APKSIGNER=$(find "$ANDROID_HOME" -iname "apksigner" -type f | sort -V | tail -1)
+          "$APKSIGNER" verify build/app/outputs/flutter-apk/app-release.apk
+
+      - name: APK als Artefakt sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: rossknecht-apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Als herunterladbares Release veroeffentlichen
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-apk
+          name: "RossKnecht – aktueller Build"
+          body: >
+            Build-Nummer (versionCode) ${{ github.run_number }} · Version 1.0.0 ·
+            Commit `${{ github.sha }}` auf `${{ github.ref_name }}`.
+            Direkt auf dem Handy herunterladen und installieren
+            ("Installation aus unbekannten Quellen" erlauben). In den
+            Android-App-Infos zu RossKnecht laesst sich die installierte
+            Version gegenpruefen (Einstellungen → Apps → RossKnecht →
+            Erweitert), dort steht "1.0.0 (${{ github.run_number }})" -
+            das sollte mit der hier verlinkten Nummer uebereinstimmen.
+          prerelease: true
+          files: app/build/app/outputs/flutter-apk/app-release.apk
