@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/pferde_provider.dart';
 import '../services/history_export_service.dart';
 import '../services/pferdeblatt_export_service.dart';
+import 'pferd_detail/behandlungen_tab.dart';
 import 'pferd_detail/decken_tab.dart';
 import 'pferd_detail/dokumente_versicherung_tab.dart';
 import 'pferd_detail/entwurmung_tab.dart';
@@ -33,7 +34,7 @@ class PferdDetailScreen extends StatelessWidget {
         final pferd = treffer.first;
 
         return DefaultTabController(
-          length: 8,
+          length: 9,
           child: Scaffold(
             appBar: AppBar(
               title: Text(pferd.anzeigename),
@@ -81,6 +82,7 @@ class PferdDetailScreen extends StatelessWidget {
                   Tab(text: 'Übersicht'),
                   Tab(text: 'Impfungen'),
                   Tab(text: 'Entwurmung'),
+                  Tab(text: 'Behandlungen'),
                   Tab(text: 'Gesundheit'),
                   Tab(text: 'Turnier'),
                   Tab(text: 'Decken'),
@@ -94,6 +96,7 @@ class PferdDetailScreen extends StatelessWidget {
                 UebersichtTab(pferd: pferd),
                 ImpfungenTab(pferd: pferd),
                 EntwurmungTab(pferd: pferd),
+                BehandlungenTab(pferd: pferd),
                 GesundheitTab(pferd: pferd),
                 TurnierTab(pferd: pferd),
                 DeckenTab(pferd: pferd),

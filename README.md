@@ -28,6 +28,7 @@ Pferdemanagement für **Impfungen, Entwurmung, Hufschmied/Zahnarzt, Turnierlizen
 - **Pferdeverwaltung**: Name, Rasse, Geschlecht, Geburtsjahr, Farbe, Abzeichen, Lebensnummer (UELN), Chipnummer, Besitzer, Stallplatz, Ankunftsdatum, Foto
 - **Impfungen**: Influenza, Tetanus, Herpes, Tollwut, Sonstige – jeweils mit Chargennummer (Equidenpass-Dokumentationspflicht), Fälligkeit und lokaler Erinnerung X Tage vorher; Verlauf pro Impfstoff bleibt als Historie erhalten, nur der jeweils neueste Eintrag zählt für die Erinnerung
 - **Entwurmung**: klassische Wurmkur oder Kotprobe (selektive Entwurmung) mit Präparat/Wirkstoff bzw. Ergebnis, Fälligkeit und Erinnerung
+- **Tierärztliche Behandlungen**: ad-hoc erfasste Behandlungsfälle (z. B. Kolik, Verletzung, akute Erkrankung) mit Grund/Diagnose, durchgeführter Behandlung, Tierarzt, Kosten und optionaler Nachkontroll-Erinnerung – als Historie, unabhängig von wiederkehrenden Terminen
 - **Gesundheitstermine**: Hufschmied/Hufpflege, Zahnarzt, tierärztliche Kontrolle, Sonstiges – mit Fälligkeit, Erinnerung und Erledigt-Status
 - **Turnierlizenzen**: FN/FEI/Landesverband, Lizenznummer, Gültigkeitszeitraum mit Ablauf-Erinnerung
 - **Turnierstarts**: einfache Ergebnishistorie (Datum, Ort, Disziplin, Platzierung)
@@ -137,6 +138,7 @@ betrifft):
 | `pferde` | Stammdaten je Pferd |
 | `impfungen` | Impfhistorie je Pferd und Impfstoff, mit Chargennummer und Fälligkeit |
 | `entwurmungen` | Wurmkur-/Kotprobenhistorie je Pferd |
+| `behandlungen` | Ad-hoc tierärztliche Behandlungen (Grund, Behandlung, Kosten, optionale Nachkontrolle) |
 | `gesundheitstermine` | Hufschmied/Zahnarzt/tierärztliche Kontrolle/Sonstiges, mit Erledigt-Status |
 | `turnierlizenzen` | Turnierlizenzen je Verband und Gültigkeitszeitraum |
 | `turnierstarts` | Ergebnishistorie einzelner Turnierstarts |

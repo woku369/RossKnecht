@@ -39,6 +39,8 @@ class _RemindersScreenState extends State<RemindersScreen> {
         return Icons.vaccines;
       case ReminderTyp.entwurmung:
         return Icons.bug_report_outlined;
+      case ReminderTyp.behandlung:
+        return Icons.medical_services_outlined;
       case ReminderTyp.gesundheitstermin:
         return Icons.local_hospital_outlined;
       case ReminderTyp.turnierlizenz:

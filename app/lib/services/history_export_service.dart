@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../database/database_helper.dart';
+import '../models/behandlung.dart';
 import '../models/pferd.dart';
 import '../widgets/date_format_x.dart';
 
@@ -19,6 +20,7 @@ class HistoryExportService {
     final db = DatabaseHelper.instance;
     final impfungen = await db.getImpfungenForPferd(pferd.id);
     final entwurmungen = await db.getEntwurmungenForPferd(pferd.id);
+    final behandlungen = await db.getBehandlungenForPferd(pferd.id);
     final erledigteTermine =
         (await db.getGesundheitsterminForPferd(pferd.id)).where((g) => g.erledigt).toList();
 
@@ -46,6 +48,17 @@ class HistoryExportService {
         '  ${e.durchgefuehrtAm.deDate}  ${e.methode.label}'
         '${e.praeparatOderWirkstoff != null ? ' – ${e.praeparatOderWirkstoff}' : ''}'
         '${e.ergebnis != null ? ' (Ergebnis: ${e.ergebnis})' : ''}',
+      );
+    }
+    buffer.writeln();
+
+    buffer.writeln('TIERÄRZTLICHE BEHANDLUNGEN');
+    if (behandlungen.isEmpty) buffer.writeln('  (keine Einträge)');
+    for (final b in behandlungen) {
+      buffer.writeln(
+        '  ${b.datum.deDate}  ${b.grund}'
+        '${b.behandlung != null && b.behandlung!.isNotEmpty ? ' – ${b.behandlung}' : ''}'
+        '${b.kostenEuro != null ? ' (${b.kostenEuro!.toStringAsFixed(2)} €)' : ''}',
       );
     }
     buffer.writeln();

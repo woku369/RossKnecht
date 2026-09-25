@@ -4,6 +4,7 @@
 - [x] Pferdeverwaltung (Name, Rasse, Geschlecht, Geburtsjahr, Farbe, Abzeichen, Lebensnummer, Chipnummer, Besitzer, Stallplatz, Ankunftsdatum, Foto)
 - [x] Impfungen (Influenza, Tetanus, Herpes, Tollwut, Sonstige) mit Chargennummer, Fälligkeit und lokaler Erinnerung
 - [x] Entwurmung (Wurmkur oder Kotprobe) mit Präparat/Ergebnis, Fälligkeit und Erinnerung
+- [x] Tierärztliche Behandlungen (ad-hoc, z. B. Kolik/Verletzung) mit Grund, Behandlung, Kosten und optionaler Nachkontroll-Erinnerung
 - [x] Gesundheitstermine (Hufschmied/Hufpflege, Zahnarzt, tierärztliche Kontrolle, Sonstiges) mit Erledigt-Status
 - [x] Turnierlizenzen (FN/FEI/Landesverband) mit Ablauf-Erinnerung
 - [x] Turnierstarts als einfache Ergebnishistorie

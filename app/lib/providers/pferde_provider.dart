@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../database/database_helper.dart';
+import '../models/behandlung.dart';
 import '../models/decke.dart';
 import '../models/dienstleister.dart';
 import '../models/entwurmung.dart';
@@ -115,6 +116,7 @@ class PferdeProvider extends ChangeNotifier {
   Future<void> deletePferd(String id) async {
     final impfungen = await _db.getImpfungenForPferd(id);
     final entwurmungen = await _db.getEntwurmungenForPferd(id);
+    final behandlungen = await _db.getBehandlungenForPferd(id);
     final gesundheitstermine = await _db.getGesundheitsterminForPferd(id);
     final turnierlizenzen = await _db.getTurnierlizenzenForPferd(id);
     final decken = await _db.getDeckenForPferd(id);
@@ -128,6 +130,9 @@ class PferdeProvider extends ChangeNotifier {
       }
       for (final e in entwurmungen) {
         await NotificationService.instance.cancelReminder(e.id);
+      }
+      for (final b in behandlungen) {
+        await NotificationService.instance.cancelReminder(b.id);
       }
       for (final g in gesundheitstermine) {
         await NotificationService.instance.cancelReminder(g.id);
@@ -221,6 +226,39 @@ class PferdeProvider extends ChangeNotifier {
 
   Future<void> deleteEntwurmung(String id) async {
     await _db.deleteEntwurmung(id);
+    try {
+      await NotificationService.instance.cancelReminder(id);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  // ---------------- Behandlungen (ad-hoc tierärztliche Behandlungen) ----------------
+
+  Future<List<Behandlung>> behandlungenFor(String pferdId) => _db.getBehandlungenForPferd(pferdId);
+
+  Future<void> saveBehandlung(Behandlung behandlung, String pferdName, {required bool isNew}) async {
+    if (isNew) {
+      await _db.insertBehandlung(behandlung);
+    } else {
+      await _db.updateBehandlung(behandlung);
+    }
+    try {
+      await NotificationService.instance.cancelReminder(behandlung.id);
+      final nachkontrolleAm = behandlung.nachkontrolleAm;
+      if (nachkontrolleAm != null) {
+        await NotificationService.instance.scheduleReminder(
+          sourceId: behandlung.id,
+          title: 'Nachkontrolle fällig: $pferdName',
+          body: 'Nachkontrolle zu "${behandlung.grund}" bei $pferdName ist fällig.',
+          scheduledDate: nachkontrolleAm.subtract(Duration(days: behandlung.erinnerungTageVorher)),
+        );
+      }
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> deleteBehandlung(String id) async {
+    await _db.deleteBehandlung(id);
     try {
       await NotificationService.instance.cancelReminder(id);
     } catch (_) {}
@@ -484,6 +522,20 @@ class PferdeProvider extends ChangeNotifier {
         typ: ReminderTyp.entwurmung,
         titel: 'Entwurmung (${e.methode.label})',
         faelligAm: e.faelligAm,
+      ));
+    }
+
+    final behandlungenMitNachkontrolle = (await _db.getAllBehandlungenMitNachkontrolle())
+        .where((b) => pferdeById.containsKey(b.pferdId) && b.nachkontrolleAm != null);
+    for (final b in behandlungenMitNachkontrolle) {
+      final pferd = pferdeById[b.pferdId]!;
+      reminders.add(Reminder(
+        quelleId: b.id,
+        pferdId: pferd.id,
+        pferdName: pferd.anzeigename,
+        typ: ReminderTyp.behandlung,
+        titel: 'Nachkontrolle: ${b.grund}',
+        faelligAm: b.nachkontrolleAm!,
       ));
     }
 

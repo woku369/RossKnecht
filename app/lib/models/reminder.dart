@@ -1,6 +1,7 @@
 enum ReminderTyp {
   impfung,
   entwurmung,
+  behandlung,
   gesundheitstermin,
   turnierlizenz,
   decke,
@@ -15,6 +16,8 @@ extension ReminderTypX on ReminderTyp {
         return 'Impfung';
       case ReminderTyp.entwurmung:
         return 'Entwurmung';
+      case ReminderTyp.behandlung:
+        return 'Behandlung';
       case ReminderTyp.gesundheitstermin:
         return 'Gesundheitstermin';
       case ReminderTyp.turnierlizenz:

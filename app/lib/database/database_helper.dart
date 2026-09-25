@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../models/behandlung.dart';
 import '../models/decke.dart';
 import '../models/dienstleister.dart';
 import '../models/entwurmung.dart';
@@ -49,6 +50,7 @@ class DatabaseHelper {
     await db.execute(_createDienstleisterTable);
     await db.execute(_createImpfungenTable);
     await db.execute(_createEntwurmungenTable);
+    await db.execute(_createBehandlungenTable);
     await db.execute(_createGesundheitsterminTable);
     await db.execute(_createTurnierlizenzenTable);
     await db.execute(_createTurnierstartsTable);
@@ -124,6 +126,21 @@ class DatabaseHelper {
       faellig_am TEXT NOT NULL,
       ergebnis TEXT,
       erinnerung_tage_vorher INTEGER NOT NULL DEFAULT 14,
+      notizen TEXT
+    )
+  ''';
+
+  static const String _createBehandlungenTable = '''
+    CREATE TABLE behandlungen (
+      id TEXT PRIMARY KEY,
+      pferd_id TEXT NOT NULL REFERENCES pferde(id) ON DELETE CASCADE,
+      datum TEXT NOT NULL,
+      grund TEXT NOT NULL,
+      behandlung TEXT,
+      dienstleister_id TEXT REFERENCES dienstleister(id) ON DELETE SET NULL,
+      kosten_euro REAL,
+      nachkontrolle_am TEXT,
+      erinnerung_tage_vorher INTEGER NOT NULL DEFAULT 2,
       notizen TEXT
     )
   ''';
@@ -227,6 +244,7 @@ class DatabaseHelper {
   Future<void> _createIndexes(Database db) async {
     await db.execute('CREATE INDEX idx_impfungen_pferd ON impfungen(pferd_id)');
     await db.execute('CREATE INDEX idx_entwurmungen_pferd ON entwurmungen(pferd_id)');
+    await db.execute('CREATE INDEX idx_behandlungen_pferd ON behandlungen(pferd_id)');
     await db.execute('CREATE INDEX idx_gesundheitstermine_pferd ON gesundheitstermine(pferd_id)');
     await db.execute('CREATE INDEX idx_turnierlizenzen_pferd ON turnierlizenzen(pferd_id)');
     await db.execute('CREATE INDEX idx_turnierstarts_pferd ON turnierstarts(pferd_id)');
@@ -368,6 +386,40 @@ class DatabaseHelper {
     final db = await database;
     final rows = await db.query('entwurmungen', orderBy: 'durchgefuehrt_am DESC');
     return rows.map(Entwurmung.fromMap).toList();
+  }
+
+  // ---------------- Behandlungen ----------------
+
+  Future<void> insertBehandlung(Behandlung b) async {
+    final db = await database;
+    await db.insert('behandlungen', b.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> updateBehandlung(Behandlung b) async {
+    final db = await database;
+    await db.update('behandlungen', b.toMap(), where: 'id = ?', whereArgs: [b.id]);
+  }
+
+  Future<void> deleteBehandlung(String id) async {
+    final db = await database;
+    await db.delete('behandlungen', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Behandlung>> getBehandlungenForPferd(String pferdId) async {
+    final db = await database;
+    final rows = await db.query(
+      'behandlungen',
+      where: 'pferd_id = ?',
+      whereArgs: [pferdId],
+      orderBy: 'datum DESC',
+    );
+    return rows.map(Behandlung.fromMap).toList();
+  }
+
+  Future<List<Behandlung>> getAllBehandlungenMitNachkontrolle() async {
+    final db = await database;
+    final rows = await db.query('behandlungen', where: 'nachkontrolle_am IS NOT NULL');
+    return rows.map(Behandlung.fromMap).toList();
   }
 
   // ---------------- Gesundheitstermine ----------------
@@ -607,6 +659,7 @@ class DatabaseHelper {
     'dienstleister',
     'impfungen',
     'entwurmungen',
+    'behandlungen',
     'gesundheitstermine',
     'turnierlizenzen',
     'turnierstarts',

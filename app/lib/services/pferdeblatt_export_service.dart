@@ -20,6 +20,7 @@ class PferdeblattExportService {
     final db = DatabaseHelper.instance;
     final impfungen = await db.getImpfungenForPferd(pferd.id);
     final entwurmungen = await db.getEntwurmungenForPferd(pferd.id);
+    final behandlungen = await db.getBehandlungenForPferd(pferd.id);
     final lizenzen = await db.getTurnierlizenzenForPferd(pferd.id);
     final decken = await db.getDeckenForPferd(pferd.id);
     final versicherungen = await db.getVersicherungenForPferd(pferd.id);
@@ -50,6 +51,19 @@ class PferdeblattExportService {
                       e.methode.label,
                       e.praeparatOderWirkstoff ?? e.ergebnis ?? '-',
                       _fmt(e.faelligAm),
+                    ])
+                .toList(),
+          ),
+          pw.SizedBox(height: 12),
+          pw.Header(level: 1, text: 'Tierärztliche Behandlungen'),
+          _tabelle(
+            spalten: const ['Datum', 'Grund', 'Behandlung', 'Kosten'],
+            zeilen: behandlungen
+                .map((b) => [
+                      _fmt(b.datum),
+                      b.grund,
+                      b.behandlung ?? '-',
+                      b.kostenEuro != null ? '${b.kostenEuro!.toStringAsFixed(2)} €' : '-',
                     ])
                 .toList(),
           ),
