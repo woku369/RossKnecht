@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -139,7 +138,7 @@ class DriveSyncService {
     final tempDir = await getTemporaryDirectory();
     final zielPfad = p.join(tempDir.path, _backupFileName);
     final datei = File(zielPfad);
-    await datei.writeAsBytes(response.bodyBytes as Uint8List);
+    await datei.writeAsBytes(response.bodyBytes);
     return datei;
   }
 }

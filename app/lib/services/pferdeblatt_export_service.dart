@@ -7,7 +7,12 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 
 import '../database/database_helper.dart';
+import '../models/decke.dart';
+import '../models/entwurmung.dart';
+import '../models/impfung.dart';
 import '../models/pferd.dart';
+import '../models/pferde_versicherung.dart';
+import '../models/turnierlizenz.dart';
 
 /// Erstellt ein A4-Datenblatt je Pferd - Stammdaten, Impf-/Entwurmungs-
 /// historie, Turnierlizenzen, Decken, Versicherungen - fuer die physische

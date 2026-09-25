@@ -5,7 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../database/database_helper.dart';
-import '../models/behandlung.dart';
+import '../models/entwurmung.dart';
+import '../models/gesundheitstermin.dart';
+import '../models/impfung.dart';
 import '../models/pferd.dart';
 import '../widgets/date_format_x.dart';
 
