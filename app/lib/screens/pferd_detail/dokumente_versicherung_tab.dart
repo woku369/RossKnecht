@@ -75,6 +75,7 @@ class _DokumenteVersicherungTabState extends State<DokumenteVersicherungTab> {
 
   Future<void> _dokumentLoeschen(PferdeDokument dokument) async {
     final bestaetigt = await _bestaetigungLoeschen();
+    if (!mounted) return;
     if (bestaetigt) {
       await context.read<PferdeProvider>().deleteDokument(dokument);
       _neuLaden();
@@ -92,6 +93,7 @@ class _DokumenteVersicherungTabState extends State<DokumenteVersicherungTab> {
 
   Future<void> _versicherungLoeschen(PferdeVersicherung v) async {
     final bestaetigt = await _bestaetigungLoeschen();
+    if (!mounted) return;
     if (bestaetigt) {
       await context.read<PferdeProvider>().deleteVersicherung(v.id);
       _neuLaden();
@@ -252,6 +254,7 @@ class _DokumentDetailsSheetState extends State<_DokumentDetailsSheet> {
     if (_titelController.text.trim().isEmpty) return;
     setState(() => _speichert = true);
     final gespeicherterPfad = await DocumentStorage.instance.speichereKopie(widget.quellPfad, praefix: 'dokument');
+    if (!mounted) return;
     final dokument = PferdeDokument(
       id: _uuid.v4(),
       pferdId: widget.pferd.id,
@@ -288,7 +291,7 @@ class _DokumentDetailsSheetState extends State<_DokumentDetailsSheet> {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<DokumentKategorie>(
-            value: _kategorie,
+            initialValue: _kategorie,
             decoration: const InputDecoration(labelText: 'Kategorie'),
             items: DokumentKategorie.values.map((k) => DropdownMenuItem(value: k, child: Text(k.label))).toList(),
             onChanged: (v) => setState(() => _kategorie = v ?? DokumentKategorie.sonstiges),
@@ -396,7 +399,7 @@ class _VersicherungFormSheetState extends State<_VersicherungFormSheet> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<VersicherungsArt>(
-              value: _art,
+              initialValue: _art,
               decoration: const InputDecoration(labelText: 'Art'),
               items: VersicherungsArt.values.map((a) => DropdownMenuItem(value: a, child: Text(a.label))).toList(),
               onChanged: (v) => setState(() => _art = v ?? VersicherungsArt.haftpflicht),
@@ -421,7 +424,7 @@ class _VersicherungFormSheetState extends State<_VersicherungFormSheet> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<Zahlungsintervall>(
-              value: _zahlungsintervall,
+              initialValue: _zahlungsintervall,
               decoration: const InputDecoration(labelText: 'Zahlungsintervall'),
               items: Zahlungsintervall.values.map((z) => DropdownMenuItem(value: z, child: Text(z.label))).toList(),
               onChanged: (v) => setState(() => _zahlungsintervall = v ?? Zahlungsintervall.jaehrlich),

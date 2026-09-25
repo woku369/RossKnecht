@@ -58,6 +58,7 @@ class _DeckenTabState extends State<DeckenTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteDecke(decke.id);
       _neuLaden();
@@ -230,7 +231,7 @@ class _DeckeFormSheetState extends State<_DeckeFormSheet> {
             Text(_isNew ? 'Decke hinzufügen' : 'Decke bearbeiten', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
             DropdownButtonFormField<DeckenTyp>(
-              value: _typ,
+              initialValue: _typ,
               decoration: const InputDecoration(labelText: 'Typ'),
               items: DeckenTyp.values.map((t) => DropdownMenuItem(value: t, child: Text(t.label))).toList(),
               onChanged: (v) => setState(() => _typ = v ?? DeckenTyp.weidedecke),
@@ -249,7 +250,7 @@ class _DeckeFormSheetState extends State<_DeckeFormSheet> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<DeckenZustand>(
-              value: _zustand,
+              initialValue: _zustand,
               decoration: const InputDecoration(labelText: 'Zustand'),
               items: DeckenZustand.values.map((z) => DropdownMenuItem(value: z, child: Text(z.label))).toList(),
               onChanged: (v) => setState(() => _zustand = v ?? DeckenZustand.gut),

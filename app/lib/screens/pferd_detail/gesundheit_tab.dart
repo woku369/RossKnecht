@@ -66,6 +66,7 @@ class _GesundheitTabState extends State<GesundheitTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteGesundheitstermin(termin.id);
       _neuLaden();
@@ -226,7 +227,7 @@ class _GesundheitsterminFormSheetState extends State<_GesundheitsterminFormSheet
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<GesundheitsterminTyp>(
-              value: _typ,
+              initialValue: _typ,
               decoration: const InputDecoration(labelText: 'Art des Termins'),
               items: GesundheitsterminTyp.values
                   .map((t) => DropdownMenuItem(value: t, child: Text(t.label)))
@@ -243,7 +244,7 @@ class _GesundheitsterminFormSheetState extends State<_GesundheitsterminFormSheet
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
-              value: _dienstleisterId,
+              initialValue: _dienstleisterId,
               decoration: const InputDecoration(labelText: 'Dienstleister'),
               items: [
                 const DropdownMenuItem(value: null, child: Text('Nicht angegeben')),

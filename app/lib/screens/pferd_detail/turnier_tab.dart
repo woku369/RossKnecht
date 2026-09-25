@@ -47,6 +47,7 @@ class _TurnierTabState extends State<TurnierTab> {
 
   Future<void> _lizenzLoeschen(Turnierlizenz lizenz) async {
     final bestaetigt = await _bestaetigungLoeschen();
+    if (!mounted) return;
     if (bestaetigt) {
       await context.read<PferdeProvider>().deleteTurnierlizenz(lizenz.id);
       _neuLaden();
@@ -64,6 +65,7 @@ class _TurnierTabState extends State<TurnierTab> {
 
   Future<void> _startLoeschen(Turnierstart start) async {
     final bestaetigt = await _bestaetigungLoeschen();
+    if (!mounted) return;
     if (bestaetigt) {
       await context.read<PferdeProvider>().deleteTurnierstart(start.id);
       _neuLaden();
@@ -280,7 +282,7 @@ class _LizenzFormSheetState extends State<_LizenzFormSheet> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Turnierverband>(
-              value: _verband,
+              initialValue: _verband,
               decoration: const InputDecoration(labelText: 'Verband'),
               items: Turnierverband.values.map((v) => DropdownMenuItem(value: v, child: Text(v.label))).toList(),
               onChanged: (v) => setState(() => _verband = v ?? Turnierverband.fn),

@@ -52,6 +52,7 @@ class _EntwurmungTabState extends State<EntwurmungTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteEntwurmung(entwurmung.id);
       _neuLaden();
@@ -221,7 +222,7 @@ class _EntwurmungFormSheetState extends State<_EntwurmungFormSheet> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<EntwurmungsMethode>(
-              value: _methode,
+              initialValue: _methode,
               decoration: const InputDecoration(labelText: 'Methode'),
               items: EntwurmungsMethode.values
                   .map((m) => DropdownMenuItem(value: m, child: Text(m.label)))

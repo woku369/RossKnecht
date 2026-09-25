@@ -53,6 +53,7 @@ class _ImpfungenTabState extends State<ImpfungenTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteImpfung(impfung.id);
       _neuLaden();
@@ -222,7 +223,7 @@ class _ImpfungFormSheetState extends State<_ImpfungFormSheet> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<ImpfstoffTyp>(
-              value: _typ,
+              initialValue: _typ,
               decoration: const InputDecoration(labelText: 'Impfstoff'),
               items: ImpfstoffTyp.values.map((t) => DropdownMenuItem(value: t, child: Text(t.label))).toList(),
               onChanged: (v) => setState(() => _typ = v ?? ImpfstoffTyp.influenza),
@@ -250,7 +251,7 @@ class _ImpfungFormSheetState extends State<_ImpfungFormSheet> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
-              value: _dienstleisterId,
+              initialValue: _dienstleisterId,
               decoration: const InputDecoration(labelText: 'Tierarzt'),
               items: [
                 const DropdownMenuItem(value: null, child: Text('Nicht angegeben')),

@@ -53,6 +53,7 @@ class _BehandlungenTabState extends State<BehandlungenTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteBehandlung(behandlung.id);
       _neuLaden();
@@ -256,7 +257,7 @@ class _BehandlungFormSheetState extends State<_BehandlungFormSheet> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
-              value: _dienstleisterId,
+              initialValue: _dienstleisterId,
               decoration: const InputDecoration(labelText: 'Tierarzt'),
               items: [
                 const DropdownMenuItem(value: null, child: Text('Nicht angegeben')),

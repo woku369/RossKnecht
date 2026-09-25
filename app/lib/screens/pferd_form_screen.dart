@@ -195,7 +195,7 @@ class _PferdFormScreenState extends State<PferdFormScreen> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<Geschlecht>(
-              value: _geschlecht,
+              initialValue: _geschlecht,
               decoration: const InputDecoration(labelText: 'Geschlecht'),
               items: Geschlecht.values.map((g) => DropdownMenuItem(value: g, child: Text(g.label))).toList(),
               onChanged: (v) => setState(() => _geschlecht = v ?? Geschlecht.wallach),

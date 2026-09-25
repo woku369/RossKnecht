@@ -159,7 +159,7 @@ class _DienstleisterFormSheetState extends State<_DienstleisterFormSheet> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<DienstleisterTyp>(
-              value: _typ,
+              initialValue: _typ,
               decoration: const InputDecoration(labelText: 'Typ'),
               items: DienstleisterTyp.values.map((t) => DropdownMenuItem(value: t, child: Text(t.label))).toList(),
               onChanged: (v) => setState(() => _typ = v ?? DienstleisterTyp.tierarzt),

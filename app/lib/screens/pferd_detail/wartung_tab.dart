@@ -59,6 +59,7 @@ class _WartungTabState extends State<WartungTab> {
         ],
       ),
     );
+    if (!mounted) return;
     if (bestaetigt == true) {
       await context.read<PferdeProvider>().deleteWartungsTask(task.id);
       _neuLaden();
