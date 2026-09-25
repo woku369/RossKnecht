@@ -53,11 +53,14 @@ jobs:
           APKSIGNER=$(find "$ANDROID_HOME" -iname "apksigner" -type f | sort -V | tail -1)
           "$APKSIGNER" verify build/app/outputs/flutter-apk/app-release.apk
 
+      - name: APK umbenennen (lesbarer Dateiname statt app-release.apk)
+        run: cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/rossknecht.apk
+
       - name: APK als Artefakt sichern
         uses: actions/upload-artifact@v4
         with:
           name: rossknecht-apk
-          path: app/build/app/outputs/flutter-apk/app-release.apk
+          path: app/build/app/outputs/flutter-apk/rossknecht.apk
 
       - name: Als herunterladbares Release veroeffentlichen
         uses: softprops/action-gh-release@v2
@@ -74,4 +77,4 @@ jobs:
             Erweitert), dort steht "1.0.0 (${{ github.run_number }})" -
             das sollte mit der hier verlinkten Nummer uebereinstimmen.
           prerelease: true
-          files: app/build/app/outputs/flutter-apk/app-release.apk
+          files: app/build/app/outputs/flutter-apk/rossknecht.apk
